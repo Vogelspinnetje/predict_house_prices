@@ -12,10 +12,10 @@ An assignment created by ChatGPT: Predicting House Prices Using Machine Learning
 
 1. Dataset
 Use this free dataset from Kaggle:
-👉 Kaggle - House Prices: Advanced Regression Techniques
+👉 [Kaggle - House Prices: Advanced Regression Techniques](https://www.kaggle.com/competitions/house-prices-advanced-regression-techniques/data)
 You’ll need a free Kaggle account to download it.
 
-2. Technical Specifications
+3. Technical Specifications
 Python 3.10 or higher
 Use scikit-learn for building your machine learning model
 Perform Exploratory Data Analysis (EDA) using pandas, seaborn, or matplotlib
@@ -32,7 +32,7 @@ Bonus Points For:
 ➕ Comparing multiple models and showing performance differences
 ➕ Saving the trained model with joblib or pickle
 
-3. Deliverables
+4. Deliverables
 A single Python script or Jupyter Notebook (.ipynb)
 A README.md file explaining:
 ✔ What your script does
