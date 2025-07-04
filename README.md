@@ -1,21 +1,18 @@
-# predict_house_prices
-An assignment created by ChatGPT: Predicting House Prices Using Machine Learning
-
-## Assignment Description
-### 🎯 Assignment: House Price Prediction with Machine Learning
+# Assignment Description
+## 🎯 Assignment: House Price Prediction with Machine Learning
 
 - Project Title: "Predicting House Prices Using Machine Learning"
 - Deadline: [You decide — typically ± 1 week if done at your own pace]
 - Goal: Build a script that predicts house sale prices based on property features.
 
-### ✅ Project Requirements
+## ✅ Project Requirements
 
-1. Dataset
+### 1. Dataset
 Use this free dataset from Kaggle:
 👉 [Kaggle - House Prices: Advanced Regression Techniques](https://www.kaggle.com/competitions/house-prices-advanced-regression-techniques/data)
 You’ll need a free Kaggle account to download it.
 
-3. Technical Specifications
+### 3. Technical Specifications
 Python 3.10 or higher
 Use scikit-learn for building your machine learning model
 Perform Exploratory Data Analysis (EDA) using pandas, seaborn, or matplotlib
@@ -32,14 +29,14 @@ Bonus Points For:
 ➕ Comparing multiple models and showing performance differences
 ➕ Saving the trained model with joblib or pickle
 
-4. Deliverables
+### 3. Deliverables
 A single Python script or Jupyter Notebook (.ipynb)
 A README.md file explaining:
 ✔ What your script does
 ✔ How to run it
 ✔ Short summary of your approach
 Screenshots of the most important results or visualizations
-### 💼 Evaluation Criteria
+## 💼 Evaluation Criteria
 
 Here’s how I will grade your project:
 
