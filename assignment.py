@@ -16,7 +16,7 @@ def exploration(data_frame):
     print(f"Data Statistics:\n{data_frame.describe()}\n")
 
 def transformation(data_frame):
-    """Transformes data to fit the regression format
+    """Transforms data to fit the regression format
 
     Args:
         data_frame (pandas.core.frame.DataFrame): Dataframe of the dataset
@@ -33,6 +33,12 @@ def transformation(data_frame):
     return X, y
 
 def train(X,y):
+    """Trains the random forest regressor
+
+    Args:
+        X (pandas.core.frame.DataFrame): Features
+        y (pandas.core.frame.DataFrame): Target
+    """
     X_train, X_test, y_train, y_test = train_test_split(X,y,test_size=0.2,random_state=42)
     
     model = RandomForestRegressor(n_estimators=100, random_state=42)
