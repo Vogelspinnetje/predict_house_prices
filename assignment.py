@@ -24,10 +24,10 @@ def transformation(data_frame):
     Returns:
         pandas.core.frame.DataFrame: Seperate dataframes, containing columns for features (X) and for target (y)
     """
-    data_frame.drop("Id", inplace=True)
+    data_frame.drop("Id", axis=1, inplace=True)
     y = data_frame["SalePrice"]
     X = data_frame.drop("SalePrice", axis=1)
-    X = pd.get_dummies()
+    X = pd.get_dummies(X)
     X.fillna(X.median(), inplace=True)
     
     return X, y
