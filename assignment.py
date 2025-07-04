@@ -24,7 +24,7 @@ def transformation(data_frame):
     Returns:
         pandas.core.frame.DataFrame: Seperate dataframes, containing columns for features (X) and for target (y)
     """
-    data_frame.drop("Id")
+    data_frame.drop("Id", inplace=True)
     y = data_frame["SalePrice"]
     X = data_frame.drop("SalePrice", axis=1)
     X = pd.get_dummies()
