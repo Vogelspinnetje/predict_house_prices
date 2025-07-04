@@ -1,6 +1,6 @@
 import pandas as pd
 import numpy as np
-from sklearn.model_selection import train_test_split
+from sklearn.model_selection import train_test_split, GridSearchCV
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score
 
@@ -50,13 +50,45 @@ def train(X,y):
     rmse = np.sqrt(mean_squared_error(y_test, y_pred))
     r2 = r2_score(y_test, y_pred)
     
-    print(f"Mean Absolute Error: {mae:.2f}")
-    print(f"Root Mean Squared Error: {rmse:.2f}")
-    print(f"R² Score: {r2:.2f}")
+    return (mae, rmse, r2)
+
+def train_optimized_arguments(X,y):
+    """Trains the random forest regressor with optimized arguments, selected by GridSearchCV
+
+    Args:
+        X (pandas.core.frame.DataFrame): Features
+        y (pandas.core.frame.DataFrame): Target
+    """
+    X_train, X_test, y_train, y_test = train_test_split(X,y,test_size=0.2,random_state=42)
+    
+    model = RandomForestRegressor(random_state=42)
+    param_grid = {
+        'n_estimators': [50, 100, 200],
+        'max_depth': [5, 10, 15]
+    }
+
+    grid_search = GridSearchCV(estimator=model, param_grid=param_grid, cv=5, scoring='neg_mean_squared_error')
+    grid_search.fit(X_train, y_train)
+    
+    print(f"Best hyperparameters: {grid_search.best_params_}")
+    
+    y_pred = grid_search.predict(X_test)
+    
+    mae = mean_absolute_error(y_test, y_pred)
+    rmse = np.sqrt(mean_squared_error(y_test, y_pred))
+    r2 = r2_score(y_test, y_pred)
+    
+    return (mae, rmse, r2)
     
 if __name__ == "__main__":
     df = pd.read_csv("data/train.csv")
     exploration(df)
     X, y = transformation(df)
-    train(X,y)
+    mae, rmse, r2 = train(X,y)
+    mae_optimized, rmse_optimized, r2_optimized = train_optimized_arguments(X,y)
+    
+    print(f"Improvement (%) Mean Absolute Error: {(mae - mae_optimized) / mae * 100:.2f}\n",
+          f"Improvement (%) Root Mean Squared Error: {(rmse - rmse_optimized) / rmse * 100:.2f}\n",
+          f"Difference R2 Score: {r2_optimized - r2:.4f}\n",
+         )
     
