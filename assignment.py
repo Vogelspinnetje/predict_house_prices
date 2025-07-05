@@ -44,13 +44,16 @@ def train(X,y):
     model = RandomForestRegressor(n_estimators=100, random_state=42)
     model.fit(X_train, y_train)
     
+    importances = model.feature_importances_
+    features = X_train.columns
+    
     y_pred = model.predict(X_test)
     
     mae = mean_absolute_error(y_test, y_pred)
     rmse = np.sqrt(mean_squared_error(y_test, y_pred))
     r2 = r2_score(y_test, y_pred)
     
-    return (mae, rmse, r2)
+    return mae, rmse, r2, importances, features
 
 def train_optimized_arguments(X,y):
     """Trains the random forest regressor with optimized arguments, selected by GridSearchCV
@@ -78,17 +81,21 @@ def train_optimized_arguments(X,y):
     rmse = np.sqrt(mean_squared_error(y_test, y_pred))
     r2 = r2_score(y_test, y_pred)
     
-    return (mae, rmse, r2)
+    return mae, rmse, r2
     
 if __name__ == "__main__":
     df = pd.read_csv("data/train.csv")
     exploration(df)
     X, y = transformation(df)
-    mae, rmse, r2 = train(X,y)
+    mae, rmse, r2, importance, features = train(X,y)
+    importance_df = pd.DataFrame({"Feature": features, "Importance": importance}).sort_values(by="Importance", ascending=False)
+    print(len(X.columns))
+    X.drop(columns=importance_df.loc[importance_df["Importance"] == 0, "Feature"], inplace=True)
+    print(len(X.columns))
+
     mae_optimized, rmse_optimized, r2_optimized = train_optimized_arguments(X,y)
     
     print(f"Improvement (%) Mean Absolute Error: {(mae - mae_optimized) / mae * 100:.2f}\n",
           f"Improvement (%) Root Mean Squared Error: {(rmse - rmse_optimized) / rmse * 100:.2f}\n",
           f"Difference R2 Score: {r2_optimized - r2:.4f}\n",
          )
-    
