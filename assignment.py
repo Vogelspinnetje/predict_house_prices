@@ -26,9 +26,13 @@ def transformation(data_frame):
         pandas.core.frame.DataFrame, pandas.core.series.Series: Feature matrix X and target y
     """
     data_frame.drop("Id", axis=1, inplace=True)
-
-    y = df["SalePrice"]
-    X = df.drop("SalePrice", axis=1)
+    
+    if 'SalePrice' in data_frame.columns:
+        y = data_frame['SalePrice']
+        X = data_frame.drop('SalePrice', axis=1)
+    else:
+        y = None
+        X = data_frame
 
     numeric_categoricals = ['MSSubClass', 'OverallQual', 'OverallCond']
     categorical_cols = X.select_dtypes(include=["object", "category"]).columns.tolist()
@@ -76,7 +80,8 @@ def train_optimized_arguments(X,y, importance):
     X.drop(columns=importance_df.loc[importance_df["Importance"] == 0, "Feature"], inplace=True)
     
     X_train, X_test, y_train, y_test = train_test_split(X,y,test_size=0.2,random_state=42)
-    
+    jlb.dump(X_train.columns.tolist(), "trained_columns.joblib")
+
     model = RandomForestRegressor(random_state=42, min_samples_leaf=1, min_samples_split=2) # Arguments already found optimal by GridSearchSV()
     param_grid = {
         "n_estimators": [43, 45, 47],
@@ -103,8 +108,3 @@ if __name__ == "__main__":
     X, y = transformation(df)
     mae, rmse, r2, importance, features = train(X,y)
     mae_optimized, rmse_optimized, r2_optimized = train_optimized_arguments(X,y, importance)
-    
-    print(f"Optimized Mean Absolute Error: {mae_optimized}\n",
-          f"Optimized Root Mean Squared Error: {rmse_optimized}\n",
-          f"Optimized R2 Score: {r2_optimized}\n",
-           )
