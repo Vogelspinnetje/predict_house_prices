@@ -22,14 +22,23 @@ def transformation(data_frame):
         data_frame (pandas.core.frame.DataFrame): Dataframe of the dataset
 
     Returns:
-        pandas.core.frame.DataFrame: Seperate dataframes, containing columns for features (X) and for target (y)
+        pandas.core.frame.DataFrame, pandas.core.series.Series: Feature matrix X and target y
     """
     data_frame.drop("Id", axis=1, inplace=True)
-    y = data_frame["SalePrice"]
-    X = data_frame.drop("SalePrice", axis=1)
-    X = pd.get_dummies(X)
-    X.fillna(X.median(), inplace=True)
-    
+
+    y = df["SalePrice"]
+    X = df.drop("SalePrice", axis=1)
+
+    numeric_categoricals = ['MSSubClass', 'OverallQual', 'OverallCond']
+    categorical_cols = X.select_dtypes(include=["object", "category"]).columns.tolist()
+    categorical_cols += numeric_categoricals
+    numeric_cols = [col for col in X.select_dtypes(include=["number"]).columns.tolist() if col not in numeric_categoricals]
+
+    X[categorical_cols] = X[categorical_cols].fillna("Missing")
+    X[numeric_cols] = X[numeric_cols].fillna(X[numeric_cols].mean())
+
+    X = pd.get_dummies(X, columns=categorical_cols)
+
     return X, y
 
 def train(X,y):
@@ -55,13 +64,16 @@ def train(X,y):
     
     return mae, rmse, r2, importances, features
 
-def train_optimized_arguments(X,y):
+def train_optimized_arguments(X,y, importance):
     """Trains the random forest regressor with optimized arguments, selected by GridSearchCV
 
     Args:
         X (pandas.core.frame.DataFrame): Features
         y (pandas.core.frame.DataFrame): Target
     """
+    importance_df = pd.DataFrame({"Feature": features, "Importance": importance}).sort_values(by="Importance", ascending=False)
+    X.drop(columns=importance_df.loc[importance_df["Importance"] == 0, "Feature"], inplace=True)
+    
     X_train, X_test, y_train, y_test = train_test_split(X,y,test_size=0.2,random_state=42)
     
     model = RandomForestRegressor(random_state=42)
@@ -88,14 +100,9 @@ if __name__ == "__main__":
     exploration(df)
     X, y = transformation(df)
     mae, rmse, r2, importance, features = train(X,y)
-    importance_df = pd.DataFrame({"Feature": features, "Importance": importance}).sort_values(by="Importance", ascending=False)
-    print(len(X.columns))
-    X.drop(columns=importance_df.loc[importance_df["Importance"] == 0, "Feature"], inplace=True)
-    print(len(X.columns))
-
-    mae_optimized, rmse_optimized, r2_optimized = train_optimized_arguments(X,y)
+    mae_optimized, rmse_optimized, r2_optimized = train_optimized_arguments(X,y, importance)
     
-    print(f"Improvement (%) Mean Absolute Error: {(mae - mae_optimized) / mae * 100:.2f}\n",
-          f"Improvement (%) Root Mean Squared Error: {(rmse - rmse_optimized) / rmse * 100:.2f}\n",
-          f"Difference R2 Score: {r2_optimized - r2:.4f}\n",
-         )
+    print(f"Optimized Mean Absolute Error: {mae_optimized}\n",
+          f"Optimized Root Mean Squared Error: {rmse_optimized}\n",
+          f"Optimized R2 Score: {r2_optimized}\n",
+           )
