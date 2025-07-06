@@ -66,8 +66,9 @@ def train(X,y):
     mae = mean_absolute_error(y_test, y_pred)
     rmse = np.sqrt(mean_squared_error(y_test, y_pred))
     r2 = r2_score(y_test, y_pred)
+    mape = np.mean(np.abs((y_test - y_pred) / y_test)) * 100
     
-    return mae, rmse, r2, importances, features
+    return mae, rmse, r2, mape, importances, features
 
 def train_optimized_arguments(X,y, importance):
     """Removes features with less importance. Selected the best parameters for the model using GridSearchCV()
@@ -98,13 +99,14 @@ def train_optimized_arguments(X,y, importance):
     
     mae = mean_absolute_error(y_test, y_pred)
     rmse = np.sqrt(mean_squared_error(y_test, y_pred))
-    r2 = r2_score(y_test, y_pred)
+    r2 = r2_score(y_test, y_pred) 
+    mape = np.mean(np.abs((y_test - y_pred) / y_test)) * 100
     
-    return mae, rmse, r2
+    return mae, rmse, r2, mape
     
 if __name__ == "__main__":
     df = pd.read_csv("data/train.csv")
     exploration(df)
     X, y = transformation(df)
-    mae, rmse, r2, importance, features = train(X,y)
-    mae_optimized, rmse_optimized, r2_optimized = train_optimized_arguments(X,y, importance)
+    mae, rmse, r2, mape, importance, features = train(X,y)
+    mae_optimized, rmse_optimized, r2_optimized, mape_optimized = train_optimized_arguments(X,y, importance)
