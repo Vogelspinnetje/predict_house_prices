@@ -3,6 +3,7 @@ import numpy as np
 from sklearn.model_selection import train_test_split, GridSearchCV
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score
+import joblib as jlb
 
 def exploration(data_frame):
     """Basic exploration of the dataset, among others detecting missing values and basic data statistics.
@@ -85,6 +86,7 @@ def train_optimized_arguments(X,y, importance):
     grid_search = GridSearchCV(estimator=model, param_grid=param_grid, cv=5, scoring='neg_mean_squared_error')
     grid_search.fit(X_train, y_train)
     
+    jlb.dump(grid_search, 'house_prices_model.joblib')
     print(f"Best hyperparameters: {grid_search.best_params_}")
     
     y_pred = grid_search.predict(X_test)
