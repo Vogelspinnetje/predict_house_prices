@@ -44,3 +44,13 @@ Analysis & Visualizations	|20%|	Are your EDA and results clear and insightful?
 Extra Effort (Bonus)	|20%|	Additional models, tuning, saving model, etc.
 
 Final Grade: A score between 1 and 10, based on quality, not flashy presentation. Expect honest, constructive feedback.
+
+# Grade
+Assignment graded by ChatGPT:
+
+| **Category**                      | **Weight** | **Feedback**                                                                                                | **Score**  |
+| --------------------------------- | ---------- | ----------------------------------------------------------------------------------------------------------- | ---------- |
+| ✅ **Functionality & Correctness** | 40%        | ✔ Script works end-to-end, correct handling of missing data, valid model training & evaluation.             | **8/10**   |
+| ✅ **Code Quality & Structure**    | 20%        | ✔ Functions modularized, clear docstrings, good variable names. <br> ⚠️ Small redundancy in transformation. | **7.5/10** |
+| ✅ **Analysis & Visualizations**   | 20%        | ✔ EDA basic but present. <br> ⚠️ No visualizations of feature importance, error distributions, etc.         | **5/10**   |
+| ✅ **Extra Effort (Bonus)**        | 20%        | ✔ You used GridSearchCV, saved your model with joblib, included feature selection based on importance.      | **7/10**   |
