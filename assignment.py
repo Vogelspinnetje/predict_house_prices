@@ -65,7 +65,7 @@ def train(X,y):
     return mae, rmse, r2, importances, features
 
 def train_optimized_arguments(X,y, importance):
-    """Trains the random forest regressor with optimized arguments, selected by GridSearchCV
+    """Removes features with less importance. Selected the best parameters for the model using GridSearchCV()
 
     Args:
         X (pandas.core.frame.DataFrame): Features
@@ -76,10 +76,10 @@ def train_optimized_arguments(X,y, importance):
     
     X_train, X_test, y_train, y_test = train_test_split(X,y,test_size=0.2,random_state=42)
     
-    model = RandomForestRegressor(random_state=42)
+    model = RandomForestRegressor(random_state=42, min_samples_leaf=1, min_samples_split=2) # Arguments already found optimal by GridSearchSV()
     param_grid = {
-        'n_estimators': [50, 100, 200],
-        'max_depth': [5, 10, 15]
+        "n_estimators": [43, 45, 47],
+        "max_depth": [8, 10, 12]
     }
 
     grid_search = GridSearchCV(estimator=model, param_grid=param_grid, cv=5, scoring='neg_mean_squared_error')
