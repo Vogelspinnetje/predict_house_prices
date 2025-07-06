@@ -1,3 +1,11 @@
+"""
+Author: Yesse Monkou
+Date: July 6th 2025
+
+This was an assignment created by ChatGPT. The assignment was to make a machine learning model
+that could predict house pricing. 
+"""
+
 import pandas as pd
 import numpy as np
 from sklearn.model_selection import train_test_split, GridSearchCV
